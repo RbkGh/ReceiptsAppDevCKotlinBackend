@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  receipts-api-server-backend:
+    restart: 'always'
+    depends_on:
+      - receipts-mongo-docker-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+      - 27017:27017
+    volumes:
+      - /data/receipts-api-server-backend
+    container_name: receipts-api-server-backend
+    environment:
+      WAIT_HOSTS: receipts-mongo-docker-container:27017
+  receipts-mongo-docker-container:
+    image: mongo:3.2.4
+    restart: 'always'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    container_name: receipts-mongo-docker-container
